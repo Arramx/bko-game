@@ -5,7 +5,6 @@ const animate = () => {
         gl.viewport(0, 0, canvas.width, canvas.height);
     }
 
-
     requestAnimationFrame(animate);
 }
 

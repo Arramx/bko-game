@@ -33,11 +33,15 @@ class Shader {
 
     setAttrib(name, size, type, normalized, stride, offset) {
         const index = gl.getAttribLocation(this.ID, name);
-        gl.vertexAttribPointer(index, size, type, normalized, stride, offset);
         gl.enableVertexAttribArray(index);
+        gl.vertexAttribPointer(index, size, type, normalized, stride, offset);
     }
 
     setUniform1i(name, val) {
         gl.uniform1i(gl.getUniformLocation(this.ID, name), val);
+    }
+
+    setUniformMatrix4fv(name, val) {
+        gl.uniformMatrix4fv(gl.getUniformLocation(this.ID, name), gl.FALSE, val);
     }
 }
