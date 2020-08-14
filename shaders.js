@@ -41,6 +41,10 @@ class Shader {
         gl.uniform1i(gl.getUniformLocation(this.ID, name), val);
     }
 
+    setUniform1f(name, val) {
+        gl.uniform1f(gl.getUniformLocation(this.ID, name), val);
+    }
+
     setUniformMatrix4fv(name, val) {
         gl.uniformMatrix4fv(gl.getUniformLocation(this.ID, name), gl.FALSE, val);
     }
