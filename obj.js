@@ -1,23 +1,22 @@
 class Rectangle {
     constructor(width, height, vertexSrc, fragmentSrc, tex_url, tex_format, favourite) {
-        this.width = width;
-        this.height = height;
-        this.widthP = this.width/canvas.width/2;
-        this.heightP = this.height/canvas.height/2;
+        this.widthP = width;
+        this.heightP = height;
         this.wasUp = false;
         this.v = 0.1;
         this.g = -0.004;
-        this.rotateQuotient = Math.random()*1800+200;
+        this.rotateQuotient = Math.random()*1000+1000;
 
         this.shader = new Shader(vertexSrc, fragmentSrc);
         this.texture = new Texture(tex_url, tex_format);
-        this.vertices = new Float32Array([-this.widthP,this.heightP,0,1,
-                                        -this.widthP,-this.heightP,0,0,
+        this.vertices = new Float32Array([0,0,0,1,
+                                        0,-this.heightP,0,0,
                                         this.widthP,-this.heightP,1,0,
-                                        this.widthP,this.heightP,1,1]);
+                                        this.widthP,0,1,1]);
         this.indices = new Uint16Array([0,1,2,0,2,3]);
         this.stride = Float32Array.BYTES_PER_ELEMENT * 4;
-        this.pos = glMatrix.vec3.fromValues(Math.random()*(1.9-this.widthP)-0.9, -1.1, 0);
+        const border = Math.sqrt(Math.pow(this.widthP, 2) + Math.pow(this.heightP, 2));
+        this.pos = glMatrix.vec3.fromValues(Math.random() * (2-2*border) - 1+border, -1.1, 0);
 
         this.vao = gl.createVertexArray();
         this.vbo = gl.createBuffer();
@@ -40,19 +39,6 @@ class Rectangle {
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.ebo);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.indices, gl.STATIC_DRAW);
-    }
-    
-    resize() {
-        this.widthP = this.width/canvas.width/2;
-        this.heightP = this.height/canvas.height/2;
-        this.vertices = new Float32Array([-this.widthP,this.heightP,0,1,
-                                        -this.widthP,-this.heightP,0,0,
-                                        this.widthP,-this.heightP,1,0,
-                                        this.widthP,this.heightP,1,1]);
-        
-        gl.bindVertexArray(this.vao);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
-        gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.STATIC_DRAW);
     }
 
     move() {
