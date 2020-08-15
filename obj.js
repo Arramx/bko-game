@@ -4,6 +4,11 @@ class Rectangle {
         this.height = height;
         this.widthP = this.width/canvas.width/2;
         this.heightP = this.height/canvas.height/2;
+        this.wasUp = false;
+        this.v = 0.1;
+        this.g = -0.004;
+        this.rotateQuotient = Math.random()*1800+200;
+
         this.shader = new Shader(vertexSrc, fragmentSrc);
         this.texture = new Texture(tex_url, tex_format);
         this.vertices = new Float32Array([-this.widthP,this.heightP,0,1,
@@ -12,10 +17,7 @@ class Rectangle {
                                         this.widthP,this.heightP,1,1]);
         this.indices = new Uint16Array([0,1,2,0,2,3]);
         this.stride = Float32Array.BYTES_PER_ELEMENT * 4;
-        this.pos = glMatrix.mat4.create();
-        glMatrix.mat4.fromTranslation(this.pos, glMatrix.vec3.fromValues(Math.random()*(2-this.widthP)-1, -1.1, 0));
-        this.v = 0.1;
-        this.g = -0.004;
+        this.pos = glMatrix.vec3.fromValues(Math.random()*(1.9-this.widthP)-0.9, -1.1, 0);
 
         this.vao = gl.createVertexArray();
         this.vbo = gl.createBuffer();
@@ -54,8 +56,14 @@ class Rectangle {
     }
 
     move() {
-        glMatrix.mat4.translate(this.pos, this.pos, glMatrix.vec3.fromValues(0,this.v,0));
+        this.pos[1] += this.v;
         this.v += this.g;
+
+        if (this.pos[1] > -1 && !this.wasUp) {
+            this.wasUp = true;
+        } else if (this.pos[1] < -1 && this.wasUp) {
+            return true;
+        }
     }
 
     draw() {
@@ -64,9 +72,11 @@ class Rectangle {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.texture.ID);
         const rotate = glMatrix.mat4.create();
-        glMatrix.mat4.fromZRotation(rotate, Date.now()/2);
+        glMatrix.mat4.fromZRotation(rotate, Date.now()/this.rotateQuotient);
+        const translation = glMatrix.mat4.create();
+        glMatrix.mat4.fromTranslation(translation, this.pos);
 
-        this.shader.setUniformMatrix4fv('view', this.pos);
+        this.shader.setUniformMatrix4fv('view', translation);
         this.shader.setUniformMatrix4fv('model', rotate);
 
         gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);

@@ -1,15 +1,30 @@
-const obj = new Rectangle(200, 100, vertexSrc, fragmentSrc, 'test.jpg', 'rgb', false);
+objs = [];
+
+setInterval(() => {
+    const favourite = Math.random() * 9 + 1
+    objs.push(new Rectangle(200, 100, vertexSrc, fragmentSrc, 'file.png', 'rgba', favourite > 9));
+}, 500);
 
 const animate = () => {
     if (canvas.width != window.innerWidth || canvas.height != window.innerHeight - 4) {
+
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight - 4;
         gl.viewport(0, 0, canvas.width, canvas.height);
-        obj.resize();
+        for (obj of objs) {
+            obj.resize();
+        }
     }
 
-    obj.move();
-    obj.draw();
+    for (obj of objs) {
+        const out = obj.move();
+        obj.draw();
+
+        if (out) {
+            objs = objs.filter(a => a !== obj);
+        }
+
+    }
 
     requestAnimationFrame(animate);
 }
