@@ -1,5 +1,5 @@
 let objs = [];
-let hp = 3;
+let hp = 99999999;
 const maxHP = hp;
 let score = 0;
 const hpBar = document.querySelector('.hp-fill');
@@ -8,8 +8,11 @@ const scorePointer = document.querySelector('.score');
 gl.clearColor(1,1,1,1);
 
 const gameInterval = setInterval(() => {
-    const favourite = Math.random() * 9 + 1
-    objs.push(new Rectangle(0.12, 0.15, vertexSrc, fragmentSrc, 'file.png', 'rgba', favourite > 7));
+    const favourite = Math.random() * 9 + 1;
+    const width = canvas.width < 450 ? 0.2 : canvas.width < 650 ? 0.16 : 0.12;
+    const height = canvas.width < 450 ? 0.25 : canvas.width < 650 ? 0.2 : 0.15;
+
+    objs.push(new Rectangle(width, height, vertexSrc, fragmentSrc, 'file.png', 'rgba', favourite > 7));
 }, 500);
 
 const lowerHP = () => {
@@ -24,15 +27,17 @@ const lowerHP = () => {
     }
 }
 
-document.addEventListener('mousemove', e => {
+const handleMove = (e, clientLocation) => {
+    let clientX = clientLocation ? eval(`e.${clientLocation}.clientX`) : e.clientX;
+    let clientY = clientLocation ? eval(`e.${clientLocation}.clientY`) : e.clientY;
+
     for (const obj of objs) {
         if (!obj.clicked) {
             const x1 = (1+obj.pos[0])*canvas.width/2;
             const x2 = x1 + obj.widthP*canvas.width/2;
             const y1 = (1-obj.pos[1])*canvas.height/2;
             const y2 = y1 + obj.heightP*canvas.height/2;
-
-            if (e.clientX > x1 && e.clientX < x2 && e.clientY > y1 && e.clientY < y2) {
+            if (clientX > x1 && clientX < x2 && clientY > y1 && clientY < y2) {
                 obj.clicked = true;
                 if (obj.favourite) {
                     lowerHP();
@@ -44,8 +49,10 @@ document.addEventListener('mousemove', e => {
             }
         }
     }
-    
-});
+}
+
+document.addEventListener('mousemove', e => handleMove(e, ''));
+document.addEventListener('touchmove', e => handleMove(e, 'targetTouches[0]'));
 
 const animate = () => {
     if (canvas.width != window.innerWidth || canvas.height != window.innerHeight - 6) {
