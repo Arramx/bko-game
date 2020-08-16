@@ -1,6 +1,6 @@
 const canvas = document.querySelector('#draw');
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight - 4;
+canvas.height = window.innerHeight - 6;
 const gl = canvas.getContext('webgl2')
 
 const vertexSrc = `# version 300 es

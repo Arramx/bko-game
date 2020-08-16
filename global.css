@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 24px;
+}
+
+.container {
+    background-color: #E8E8E8;
+    border-radius: 45px;
+    text-align: center;
+    box-shadow: 10px 10px 5px rgba(0,0,0,0.45);
+    padding: 2rem 1.5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.title {
+    margin-bottom: 0.8rem;
+    font-size: 2rem;
+    font-weight: bold;
+}

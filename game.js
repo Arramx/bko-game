@@ -6,9 +6,11 @@ let mouseClick = false;
 const hpBar = document.querySelector('.hp-fill');
 const scorePointer = document.querySelector('.score');
 
-setInterval(() => {
+gl.clearColor(1,1,1,1);
+
+const gameInterval = setInterval(() => {
     const favourite = Math.random() * 9 + 1
-    objs.push(new Rectangle(0.12, 0.15, vertexSrc, fragmentSrc, 'file.png', 'rgba', favourite > 9));
+    objs.push(new Rectangle(0.12, 0.15, vertexSrc, fragmentSrc, 'file.png', 'rgba', favourite > 7));
 }, 500);
 
 document.addEventListener('mousedown', () => mouseClick = true);
@@ -27,6 +29,15 @@ document.addEventListener('mousemove', e => {
                     if (obj.favourite) {
                         hp--;
                         hpBar.style.width = `${Math.round(hp/maxHP*100)}%`;
+
+                        if (hp === 0) {
+                            clearInterval(gameInterval);
+                            objs = [];
+                            document.querySelector('.title').innerHTML = `Wynik: ${score}`;
+                            document.querySelector('.container').style.display = 'block';
+                            break;
+                        }
+
                     } else {
                         score++;
                         scorePointer.innerHTML = score;
@@ -39,11 +50,13 @@ document.addEventListener('mousemove', e => {
 });
 
 const animate = () => {
-    if (canvas.width != window.innerWidth || canvas.height != window.innerHeight - 4) {
+    if (canvas.width != window.innerWidth || canvas.height != window.innerHeight - 6) {
         canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight - 4;
+        canvas.height = window.innerHeight - 6;
         gl.viewport(0, 0, canvas.width, canvas.height);
     }
+
+    gl.clear(gl.COLOR_BUFFER_BIT);
 
     for (const obj of objs) {
         obj.move();
