@@ -18,8 +18,7 @@ class Rectangle {
                                         this.widthP,0,1,1]);
         this.indices = new Uint16Array([0,1,2,0,2,3]);
         this.stride = Float32Array.BYTES_PER_ELEMENT * 4;
-        const border = Math.sqrt(Math.pow(this.widthP, 2) + Math.pow(this.heightP, 2));
-        this.pos = glMatrix.vec3.fromValues(Math.random() * (2-2*border) - 1+border, -1.1, 0);
+        this.pos = glMatrix.vec3.fromValues(Math.random() * (2-this.widthP) - 1+this.widthP, -1.1, 0);
 
         this.vao = gl.createVertexArray();
         this.vbo = gl.createBuffer();
