@@ -1,4 +1,7 @@
-objs = [];
+let objs = [];
+let hp = 3;
+const hpBar = document.querySelector('.hp-fill');
+const scorePointer = document.querySelector('.score');
 
 setInterval(() => {
     const favourite = Math.random() * 9 + 1

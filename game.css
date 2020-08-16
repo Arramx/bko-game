@@ -1,0 +1,25 @@
+.hp-bar {
+    position: absolute;
+    right: 2vw;
+    top: 4vh;
+    width: 40vw;
+    height: 5vh;
+    background-color: red;
+    border: 5px solid black;
+    border-radius: 5px;
+}
+
+.hp-fill {
+    width: 100%;
+    height: 100%;
+    background-color: lightgreen;
+}
+
+.score {
+    position: absolute;
+    left: 2vw;
+    top: 2.5vh;
+    font-weight: bold;
+    font-size: 3em;
+    user-select: none;
+}
