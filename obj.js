@@ -5,7 +5,8 @@ class Rectangle {
         this.wasUp = false;
         this.v = 0.1;
         this.g = -0.004;
-        this.rotateQuotient = Math.random()*1000+1000;
+        this.rotate = glMatrix.mat4.create();
+        glMatrix.mat4.fromZRotation(this.rotate, Date.now());
 
         this.shader = new Shader(vertexSrc, fragmentSrc);
         this.texture = new Texture(tex_url, tex_format);
@@ -57,13 +58,11 @@ class Rectangle {
         gl.bindVertexArray(this.vao);
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.texture.ID);
-        const rotate = glMatrix.mat4.create();
-        glMatrix.mat4.fromZRotation(rotate, Date.now()/this.rotateQuotient);
         const translation = glMatrix.mat4.create();
         glMatrix.mat4.fromTranslation(translation, this.pos);
 
         this.shader.setUniformMatrix4fv('view', translation);
-        this.shader.setUniformMatrix4fv('model', rotate);
+        this.shader.setUniformMatrix4fv('model', this.rotate);
 
         gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
     }
