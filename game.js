@@ -1,5 +1,5 @@
 let objs = [];
-let hp = 99999999;
+let hp = 3;
 const maxHP = hp;
 let score = 0;
 const hpBar = document.querySelector('.hp-fill');
